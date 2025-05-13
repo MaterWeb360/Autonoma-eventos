@@ -57,7 +57,6 @@ Container::make('post_meta', 'header', 'Cabecera')
             ->set_width(50)
     ]);
 
-
 Container::make('post_meta', 'formulario', 'Formulario')
     ->where('post_type', '=', 'page')
     ->where('post_id', '!=', function() {
@@ -194,28 +193,44 @@ Container::make('post_meta', 'formulario', 'Formulario')
                             ->set_width(50),
                         //codFormExterno
                         Field::make('text', 'campo_select1_codform', __('Código de formulario: cCodFormExterno'))
-                            ->set_width(50)
+                            ->set_width(100)
                             ->set_conditional_logic([
-                                'relation' => 'AND',
+                                'relation' => 'OR',
                                 [
                                     'field' => 'campo_select_check',
-                                    'value' => '1', 
+                                    'value' => '1',
                                     'compare' => '=',
                                 ],
-                             ]),
+                                [
+                                    'field' => 'campo_select_anidado_check',
+                                    'value' => '1',
+                                    'compare' => '=',
+                                ],
+                            ]),
                         Field::make('checkbox', 'campo_select_check', __('Activar carreras'))
+                             ->set_width(50)
                             ->set_option_value('1')
                             ->set_help_text('Marca esta opción para mostrar las carreras.'),
+                        Field::make('checkbox', 'campo_select_anidado_check', __('Activar campos anidados'))
+                             ->set_width(50)
+                            ->set_option_value('1')
+                            ->set_help_text('Marca esta opción para mostrar un seleccionable anidado'),
+                        //carreras segundo nivel
                         Field::make('text', 'campo_select_carreras_placeholder', __('Título del campo'))
                             ->set_width(100)
                             ->set_conditional_logic([
-                                'relation' => 'AND',
+                                'relation' => 'OR',
                                 [
                                     'field' => 'campo_select_check',
-                                    'value' => '1', 
+                                    'value' => '1',
                                     'compare' => '=',
                                 ],
-                             ]), 
+                                [
+                                    'field' => 'campo_select_anidado_check',
+                                    'value' => '1',
+                                    'compare' => '=',
+                                ],
+                            ]), 
                         Field::make('association', 'campo_select_carreras', __('Escoger carreras o programas'))
                             ->set_types([
                                 [
@@ -231,9 +246,84 @@ Container::make('post_meta', 'formulario', 'Formulario')
                                     'compare' => '=',
                                 ],
                              ]),
-                        
+                        //campos anidados segundo nivel
+                        Field::make('text', 'campo_name', 'Identificador del campo')
+                            ->set_width(50) 
+                            ->set_conditional_logic([
+                                'relation' => 'AND',
+                                [
+                                    'field' => 'campo_select_anidado_check',
+                                    'value' => '1', 
+                                    'compare' => '=',
+                                ],
+                             ]), 
+                        Field::make('text', 'campo_name_option', 'Identificador de las opciones')
+                            ->set_width(50) 
+                            ->set_conditional_logic([
+                                'relation' => 'AND',
+                                [
+                                    'field' => 'campo_select_anidado_check',
+                                    'value' => '1', 
+                                    'compare' => '=',
+                                ],
+                             ]),
+                        Field::make('select', 'campo_tamano', 'Tamaño')
+                            ->set_width(8)
+                            ->set_conditional_logic([
+                                'relation' => 'AND',
+                                [
+                                    'field' => 'campo_select_anidado_check',
+                                    'value' => '1', 
+                                    'compare' => '=',
+                                ],
+                             ])
+                            ->set_options(array(
+                                '48%' => '50%',
+                                '100%' => '100%',
+                            )),
             
-                             
+                        Field::make('complex', 'campo_select_niveldos', __('Campo de selección'))
+                            ->setup_labels(['plural_name' => 'Selecciones', 'singular_name' => 'Selección'])
+                            ->set_help_text('Agregar Items al Seleccionable')
+                            ->set_width(100)
+                            ->set_layout('tabbed-vertical')
+                            ->set_conditional_logic([
+                                'relation' => 'AND',
+                                [
+                                    'field' => 'campo_select_anidado_check',
+                                    'value' => '1', 
+                                    'compare' => '=',
+                                ],
+                             ])
+                            ->add_fields(array(
+                                //PLACEHOLDER - TEXT PARA ESCRIBIR LA PRIMERA OPCION DEL SELECT 
+                                Field::make('text', 'campo_select_placeholder', __('Título del campo'))
+                                    ->set_help_text('Escribe el texto que describe al campo')
+                                    ->set_width(50),
+                                Field::make('text', 'campo_value', 'Dato/código guardado o a guardar')
+                                    ->set_help_text('Ejm: 0, 10, 21, 17')
+                                    ->set_width(50),
+                                Field::make('select', 'campo_tamano', 'Tamaño')
+                                    ->set_width(100)
+                                    ->set_options(array(
+                                        '48%' => '50%',
+                                        '100%' => '100%',
+                                    )),
+                                Field::make('association', 'campo_carreras', __('Escoger carreras o programas'))
+                                    ->set_types([
+                                        [
+                                            'type'      => 'post',
+                                            'post_type' => 'carreras', 
+                                        ],
+                                    ]),
+
+
+                            )),
+
+
+
+    
+                    
                     ))
                     ->set_header_template('Opción <%- $_index + 1 %>'),
                 
@@ -245,7 +335,6 @@ Container::make('post_meta', 'formulario', 'Formulario')
                            'post_type' => 'carreras', 
                        ],
                    ])
-                   ->set_help_text('Selecciona hasta 3 carreras')
                    ->set_conditional_logic([
                        'relation' => 'AND',
                        [

@@ -39,7 +39,6 @@ function getGET() {
   
     return utms;
   }
-  
   $.fn.serializeObject = function () {
     var obj = {};
     var arr = this.serializeArray();
@@ -74,7 +73,6 @@ function getGET() {
   
     return obj;
   }
-  
   
 var camposRequeridos = {
     cKeyAccess: "",
@@ -133,152 +131,152 @@ var camposRequeridos = {
     cAux15: ""
   };
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const formulario = document.querySelector('form');
+document.addEventListener('DOMContentLoaded', () => {
+  const formulario = document.querySelector('form');
 
-    // 1. Manejo de selects con niveles dependientes
-    const nivel1Divs = formulario.querySelectorAll('[data-nivel="1"]');
-    nivel1Divs.forEach((div) => {
-      const select = div.querySelector('select');
+  // 1. Manejo de selects con niveles dependientes
+  const nivel1Divs = formulario.querySelectorAll('[data-nivel="1"]');
+  nivel1Divs.forEach((div) => {
+    const select = div.querySelector('select');
 
-      if (select) {
-        select.addEventListener('change', (e) => {
-          const valorSeleccionado = e.target.value;
+    if (select) {
+      select.addEventListener('change', (e) => {
+        const valorSeleccionado = e.target.value;
 
-          // Tomamos el contenedor de hijos que está justo después de este nivel 1
-          const grupoHijos = div.nextElementSibling;
-          if (!grupoHijos || !grupoHijos.classList.contains('form__selects')) return;
+        // Tomamos el contenedor de hijos que está justo después de este nivel 1
+        const grupoHijos = div.nextElementSibling;
+        if (!grupoHijos || !grupoHijos.classList.contains('form__selects')) return;
 
-          // Buscar si hay hijos en este contenedor que dependan de esta selección
-          const hijosCorrespondientes = grupoHijos.querySelectorAll(`[data-nivel="2"][data-parent="${valorSeleccionado}"]`);
+        // Buscar si hay hijos en este contenedor que dependan de esta selección
+        const hijosCorrespondientes = grupoHijos.querySelectorAll(`[data-nivel="2"][data-parent="${valorSeleccionado}"]`);
 
-          // Si no hay hijos para este valor, salimos (no hacemos nada)
-          if (hijosCorrespondientes.length === 0) return;
+        // Si no hay hijos para este valor, salimos (no hacemos nada)
+        if (hijosCorrespondientes.length === 0) return;
 
-          // Ocultamos todos los hijos en este grupo (no en todo el form)
-          grupoHijos.querySelectorAll('[data-nivel="2"]').forEach(n2 => {
-            n2.classList.add('oculto');
-          });
-
-          // Mostramos solo los hijos correspondientes
-          hijosCorrespondientes.forEach(hijo => {
-            hijo.classList.remove('oculto');
-
-            const wrapper = hijo.closest('.form__selects');
-            if (wrapper) wrapper.classList.remove('oculto');
-          });
+        // Ocultamos todos los hijos en este grupo (no en todo el form)
+        grupoHijos.querySelectorAll('[data-nivel="2"]').forEach(n2 => {
+          n2.classList.add('oculto');
         });
-      }
-    });
-    
-    // 2. Selects que actualizan input oculto
-    formulario.querySelectorAll('select[data-name]').forEach(select => {
-      select.addEventListener('change', function () {
-        const selectedText = this.options[this.selectedIndex].text;
-        const dataName = this.getAttribute('data-name');
-        const targetDataName = dataName.replace(/^n/, 'c');
-  
-        // Quitar name a todos los similares
-        formulario.querySelectorAll(`input[type="hidden"][data-name="${targetDataName}"]`).forEach(input => {
-          input.removeAttribute('name');
+
+        // Mostramos solo los hijos correspondientes
+        hijosCorrespondientes.forEach(hijo => {
+          hijo.classList.remove('oculto');
+
+          const wrapper = hijo.closest('.form__selects');
+          if (wrapper) wrapper.classList.remove('oculto');
         });
-  
-        const wrapper = this.closest('.form__input-select-wrapper');
-        const container = wrapper?.querySelector('[data-container]');
-        if (container) {
-          if (selectedText !== "") {
-            container.innerHTML = `<input type="hidden" data-name="${targetDataName}" name="${targetDataName}" value="${selectedText}">`;
-          } else {
-            container.innerHTML = '';
-          }
-        } else {
-          const hiddenInput = wrapper?.querySelector(`input[type="hidden"][data-name="${targetDataName}"]`);
-          if (hiddenInput) {
-            hiddenInput.value = selectedText;
-            hiddenInput.setAttribute('name', targetDataName);
-          }
-        }
       });
-    });
+    }
+  });
+  
+  // 2. Selects que actualizan input oculto
+  formulario.querySelectorAll('select[data-name]').forEach(select => {
+    select.addEventListener('change', function () {
+      const selectedText = this.options[this.selectedIndex].text;
+      const dataName = this.getAttribute('data-name');
+      const targetDataName = dataName.replace(/^n/, 'c');
 
-    // 4. Selects que cambian entre si data-name
-    document.querySelectorAll('select[data-name]').forEach(select => {
-      select.addEventListener('change', function () {
-        const selectedText = this.options[this.selectedIndex].text.trim();
-        const dataName    = this.dataset.name;           // ej "nCarrera" o "nTipDocumento"
-        const targetName  = `c${dataName.slice(1)}`;     // ej "cCarrera" o "cTipDocumento"
-    
-        // Asegurar que sólo éste select tenga el name
-        document.querySelectorAll(`select[data-name="${dataName}"]`)
-          .forEach(s => { if (s !== this) s.removeAttribute('name') });
-        this.setAttribute('name', dataName);
-    
-        // Crear/actualizar el hidden en su data-container
-        const wrapper = this.closest('.form__input-select-wrapper');
-        const container = wrapper?.querySelector('[data-container]');
-        if (!container) return;
-    
+      // Quitar name a todos los similares
+      formulario.querySelectorAll(`input[type="hidden"][data-name="${targetDataName}"]`).forEach(input => {
+        input.removeAttribute('name');
+      });
+
+      const wrapper = this.closest('.form__input-select-wrapper');
+      const container = wrapper?.querySelector('[data-container]');
+      if (container) {
         if (selectedText !== "") {
-          container.innerHTML = 
-            `<input type="hidden" data-name="${targetName}" name="${targetName}" value="${selectedText}">`;
+          container.innerHTML = `<input type="hidden" data-name="${targetDataName}" name="${targetDataName}" value="${selectedText}">`;
         } else {
           container.innerHTML = '';
         }
-      });
-    });
-  
-    // 3. Radios que actualizan input oculto
-    formulario.querySelectorAll('input[type="radio"]').forEach(radio => {
-      radio.addEventListener('change', function () {
-        if (this.checked) {
-          const groupName = this.name;
-          const targetName = groupName.replace(/^n/, 'c');
-  
-          formulario.querySelectorAll(`input[type="hidden"][data-name="${targetName}"]`).forEach(input => {
-            input.removeAttribute('name');
-          });
-  
-          const label = this.closest('label');
-          const hidden = label?.querySelector(`input[type="hidden"][data-name="${targetName}"]`);
-          if (hidden) {
-            hidden.setAttribute('name', targetName);
-          }
+      } else {
+        const hiddenInput = wrapper?.querySelector(`input[type="hidden"][data-name="${targetDataName}"]`);
+        if (hiddenInput) {
+          hiddenInput.value = selectedText;
+          hiddenInput.setAttribute('name', targetDataName);
         }
-      });
-    });
-  
-    // 5
-    function manejarCambioSelect(e) {
-      const select = e.target;
-      const wrapper = select.closest('.form__input-select-wrapper');
-      if (!wrapper) return;
-  
-      const nuevoInput = wrapper.querySelector('input[data-name="cCodFormExterno"]');
-      if (!nuevoInput) return;
-  
-      // Encontrar el input actual con name="cCodFormExterno"
-      const actual = formulario.querySelector('input[name="cCodFormExterno"]');
-      if (actual) {
-          actual.removeAttribute('name');
-          actual.setAttribute('data-name', 'cCodFormExterno');
       }
-  
-      // Asignar name al nuevo input
-      nuevoInput.setAttribute('name', 'cCodFormExterno');
-      nuevoInput.removeAttribute('data-name');
-  }
-  
-  function iniciarListeners() {
-      const selects = formulario.querySelectorAll('select');
-      selects.forEach(select => {
-          select.addEventListener('change', manejarCambioSelect);
-      });
-  }
-  
-  iniciarListeners();
-  
-
+    });
   });
+
+  // 4. Selects que cambian entre si data-name
+  document.querySelectorAll('select[data-name]').forEach(select => {
+    select.addEventListener('change', function () {
+      const selectedText = this.options[this.selectedIndex].text.trim();
+      const dataName    = this.dataset.name;           // ej "nCarrera" o "nTipDocumento"
+      const targetName  = `c${dataName.slice(1)}`;     // ej "cCarrera" o "cTipDocumento"
+  
+      // Asegurar que sólo éste select tenga el name
+      document.querySelectorAll(`select[data-name="${dataName}"]`)
+        .forEach(s => { if (s !== this) s.removeAttribute('name') });
+      this.setAttribute('name', dataName);
+  
+      // Crear/actualizar el hidden en su data-container
+      const wrapper = this.closest('.form__input-select-wrapper');
+      const container = wrapper?.querySelector('[data-container]');
+      if (!container) return;
+  
+      if (selectedText !== "") {
+        container.innerHTML = 
+          `<input type="hidden" data-name="${targetName}" name="${targetName}" value="${selectedText}">`;
+      } else {
+        container.innerHTML = '';
+      }
+    });
+  });
+
+  // 3. Radios que actualizan input oculto
+  formulario.querySelectorAll('input[type="radio"]').forEach(radio => {
+    radio.addEventListener('change', function () {
+      if (this.checked) {
+        const groupName = this.name;
+        const targetName = groupName.replace(/^n/, 'c');
+
+        formulario.querySelectorAll(`input[type="hidden"][data-name="${targetName}"]`).forEach(input => {
+          input.removeAttribute('name');
+        });
+
+        const label = this.closest('label');
+        const hidden = label?.querySelector(`input[type="hidden"][data-name="${targetName}"]`);
+        if (hidden) {
+          hidden.setAttribute('name', targetName);
+        }
+      }
+    });
+  });
+
+  // 5
+  function manejarCambioSelect(e) {
+    const select = e.target;
+    const wrapper = select.closest('.form__input-select-wrapper');
+    if (!wrapper) return;
+
+    const nuevoInput = wrapper.querySelector('input[data-name="cCodFormExterno"]');
+    if (!nuevoInput) return;
+
+    // Encontrar el input actual con name="cCodFormExterno"
+    const actual = formulario.querySelector('input[name="cCodFormExterno"]');
+    if (actual) {
+        actual.removeAttribute('name');
+        actual.setAttribute('data-name', 'cCodFormExterno');
+    }
+
+    // Asignar name al nuevo input
+    nuevoInput.setAttribute('name', 'cCodFormExterno');
+    nuevoInput.removeAttribute('data-name');
+}
+
+function iniciarListeners() {
+    const selects = formulario.querySelectorAll('select');
+    selects.forEach(select => {
+        select.addEventListener('change', manejarCambioSelect);
+    });
+}
+
+iniciarListeners();
+
+
+});
   
 //Recopilacion y envio de datos
 document.addEventListener('DOMContentLoaded', function () {
@@ -546,44 +544,42 @@ document.addEventListener('DOMContentLoaded', function () {
   })
 
  //validacion en tiempo real
-
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector('form');
-
   if (!form) return;
 
   const inputs = form.querySelectorAll('input[type="text"], input[type="email"], input[type="number"], select, textarea');
 
   inputs.forEach(input => {
+    const tipo = input.type;
     const evento = input.tagName === 'SELECT' ? 'change' : 'input';
 
-    input.addEventListener(evento, () => {
+    const mostrarError = (mensaje) => {
+      const contenedor = input.parentElement;
+      const existente = contenedor.querySelector('.error-message');
+      if (existente) existente.remove();
+
+      const p = document.createElement('p');
+      p.className = 'error-message';
+      p.style.color = 'red';
+      p.textContent = mensaje;
+      contenedor.appendChild(p);
+
+      input.classList.add('error-input');
+      input.classList.remove('sucess-input');
+    };
+
+    const limpiarError = () => {
+      const contenedor = input.parentElement;
+      const existente = contenedor.querySelector('.error-message');
+      if (existente) existente.remove();
+
+      input.classList.remove('error-input');
+      input.classList.add('sucess-input');
+    };
+
+    const validarCampo = () => {
       const valor = input.value.trim();
-      const tipo = input.type;
-
-      const mostrarError = (mensaje) => {
-        const contenedor = input.parentElement;
-        const existente = contenedor.querySelector('.error-message');
-        if (existente) existente.remove();
-
-        const p = document.createElement('p');
-        p.className = 'error-message';
-        p.style.color = 'red';
-        p.textContent = mensaje;
-        contenedor.appendChild(p);
-
-        input.classList.add('error-input');
-        input.classList.remove('sucess-input');
-      };
-
-      const limpiarError = () => {
-        const contenedor = input.parentElement;
-        const existente = contenedor.querySelector('.error-message');
-        if (existente) existente.remove();
-
-        input.classList.remove('error-input');
-        input.classList.add('sucess-input');
-      };
 
       // Validación SELECT
       if (input.tagName === 'SELECT') {
@@ -610,15 +606,16 @@ document.addEventListener('DOMContentLoaded', () => {
           const opcion = select.options[select.selectedIndex].textContent.trim();
 
           if (valor) {
-            if (opcion === 'DNI' && /^\d{8}$/.test(valor)) limpiarError(input);
-            else if (opcion === 'Carnet de extranjería' && /^[a-zA-Z0-9]{9,}$/.test(valor)) limpiarError(input);
-            else if (opcion === 'Pasaporte' && /^[a-zA-Z0-9]{6,}$/.test(valor)) limpiarError(input);
+            if (opcion === 'DNI' && /^\d{8}$/.test(valor)) limpiarError();
+            else if (opcion === 'Carnet de extranjería' && /^[a-zA-Z0-9]{9,}$/.test(valor)) limpiarError();
+            else if (opcion === 'Pasaporte' && /^[a-zA-Z0-9]{6,}$/.test(valor)) limpiarError();
             else mostrarError('Número de documento no válido para el tipo seleccionado.');
           } else {
             mostrarError('Por favor ingresa un número de documento.');
           }
           return;
         }
+
         if (valor && /^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+(\s[a-zA-ZáéíóúÁÉÍÓÚñÑ]+)*$/.test(valor)) {
           limpiarError();
         } else {
@@ -644,7 +641,6 @@ document.addEventListener('DOMContentLoaded', () => {
       // TEXTAREA
       if (input.tagName === 'TEXTAREA') {
         if (!input.offsetParent) return;
-
         const requerido = input.dataset.requerido === 'required';
         if (requerido && !valor) {
           mostrarError('Este campo es obligatorio.');
@@ -652,14 +648,17 @@ document.addEventListener('DOMContentLoaded', () => {
           limpiarError();
         }
       }
-    });
+    };
 
-    // NORMALIZAR ESPACIOS AL SALIR DEL CAMPO (solo inputs tipo text)
-    if (input.type === 'text') {
-      input.addEventListener('blur', () => {
+    input.addEventListener(evento, validarCampo);
+
+    // BLUR: limpia espacios Y valida nuevamente
+    input.addEventListener('blur', () => {
+      if (input.type === 'text') {
         input.value = input.value.trim().replace(/\s+/g, ' ');
-      });
-    }
+      }
+      validarCampo(); // ← Aquí hacemos que vuelva a validar
+    });
   });
 });
 

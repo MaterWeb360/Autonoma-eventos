@@ -59,15 +59,17 @@ $boton = carbon_get_post_meta(get_the_ID(), 'boton');
                         }
                     echo '</div>';
                     
-                    
+                    //por defecto 1er nivel 1 era version
                     echo '<div class="form__selects oculto" style="width: 100%">';
                     foreach ($bucleOps as $option) {
-                        //var_dump($option);
                         $codForm = $option['campo_select1_codform'];//codform
                         $s_check =  $option['campo_select_check'];//check
                         $s_place = $option['campo_select_carreras_placeholder']; //placeholder
                         $parent = $option['campo_select_value'];//parent
                         $bucleSelec = $option['campo_select_carreras'];//bucle de carreras
+
+                        //check 2do nivel
+                        $s_check_anidado =  $option['campo_select_anidado_check'];//check
                         if($s_check == '1'){
                             echo '<div class="form__input-select-wrapper oculto" data-nivel="2" data-parent="'.$parent.'" style="width: 100%">';
                                 echo '<select name="" data-name="nCarrera" class="form__input-select w-select">';
@@ -84,9 +86,14 @@ $boton = carbon_get_post_meta(get_the_ID(), 'boton');
                                 echo '<input type="hidden" data-name="cCodFormExterno" value="'.$codForm.'">';
                                 }
                             echo '</div>';
+                        }elseif($s_check == '0' && $s_check_anidado == '1'){
+                          echo 'SELECTS 2DO NIVEL';  
                         }
                     }
                     echo '</div>';
+
+                    //2do nivel - 2da version CHECK ANIDADO
+                    //ELSE ARRIBAAAAA
                     
                     break;
                 case '4': //campo radio
