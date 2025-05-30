@@ -45,6 +45,8 @@ $boton = carbon_get_post_meta(get_the_ID(), 'boton');
                     $s_name = $campo['campo_name'];
                     $bucleOps = $campo['campo_select'];
                     $name_option = $campo['campo_name_option'];
+
+                    //1er nivel
                     echo '<div class="form__input-select-wrapper" style="width: '.$size.'" data-nivel="1">';
                         echo '<select name="" data-name="'.$s_name.'" class="form__input-select w-select">';
                         echo '<option>'.$s_place.'</option>';
@@ -59,18 +61,23 @@ $boton = carbon_get_post_meta(get_the_ID(), 'boton');
                         }
                     echo '</div>';
                     
-                    //por defecto 1er nivel 1 era version
+                    //2do nivel
                     echo '<div class="form__selects oculto" style="width: 100%">';
                     foreach ($bucleOps as $option) {
                         $codForm = $option['campo_select1_codform'];//codform
-                        $s_check =  $option['campo_select_check'];//check
-                        $s_place = $option['campo_select_carreras_placeholder']; //placeholder
                         $parent = $option['campo_select_value'];//parent
+                        //campos select carreras
+                        $s_check =  $option['campo_select_check'];//check
+                        $s_place = $option['campo_select_carreras_placeholder']; //placeholde
                         $bucleSelec = $option['campo_select_carreras'];//bucle de carreras
 
-                        //check 2do nivel
-                        $s_check_anidado =  $option['campo_select_anidado_check'];//check
-                        if($s_check == '1'){
+                        //campos select anidados
+                        $s_place_ani = $option['campo_select_placeholder']; //placeholder anidado
+                        $s_check_anidado =  $option['campo_select_anidado_check'];//check de anidado
+                        $bucleSelecAni = $option['campo_select_niveldos'];//bucle
+                        $s_name_ani = $campo['campo_name'];
+                        $name_option_ani = $campo['campo_name_option'];
+                        if($s_check == '1'&& $s_check_anidado == '0'){
                             echo '<div class="form__input-select-wrapper oculto" data-nivel="2" data-parent="'.$parent.'" style="width: 100%">';
                                 echo '<select name="" data-name="nCarrera" class="form__input-select w-select">';
                                     echo '<option disabled selected>'.$s_place.'</option>';
@@ -87,13 +94,54 @@ $boton = carbon_get_post_meta(get_the_ID(), 'boton');
                                 }
                             echo '</div>';
                         }elseif($s_check == '0' && $s_check_anidado == '1'){
-                          echo 'SELECTS 2DO NIVEL';  
+                            //var_dump($option);
+                            echo '<div class="form__input-select-wrapper oculto" data-nivel="2" data-parent="'.$parent.'" style="width: 100%">';
+                                echo '<select name="" data-name="'.$s_name_ani.'" class="form__input-select w-select">';
+                                    echo '<option>'.$s_place.'</option>';
+                                    foreach ($bucleSelecAni as $option) {
+                                        $value = $option['campo_value'];
+                                        $label = $option['campo_select_placeholder'];
+                                        echo '<option value="'.$value.'">'.$label.'</option>';
+                                    }
+                                echo '</select>';
+                                if($name_option_ani){
+                                    echo '<input type="hidden" data-name="'.$name_option_ani.'" value="">';
+                                }    
+                            echo '</div>';
                         }
                     }
                     echo '</div>';
 
-                    //2do nivel - 2da version CHECK ANIDADO
-                    //ELSE ARRIBAAAAA
+                    //3er nivel
+                    echo '<div class="form__selects oculto" style="width: 100%">';
+                        foreach ($bucleOps as $option) {
+                                $bucleThree = $option['campo_select_niveldos'];
+                                foreach ($bucleThree as $optionThree) {
+                                    $parenThree = $optionThree['campo_value'];
+                                    $codFormThree = $optionThree['campo_select2_codform'];
+                                    
+                                    $s_place_Tre = $optionThree['campo_select_placeholder'];
+                                    $bucleThreeCarrera = $optionThree['campo_carreras']; //bucle options
+                                    echo '<div class="form__input-select-wrapper oculto" data-nivel="3" data-parent="'.$parenThree.'" style="width: 100%">';
+                                        echo '<select name="" data-name="nCarrera" class="form__input-select w-select">';
+                                            echo '<option>Seleccione una carrera de '.$s_place_Tre.'</option>';
+                                            foreach ($bucleThreeCarrera as $carreraTree) {
+                                                $post_id = $carreraTree['id'];
+                                                $titulo = get_the_title($post_id);
+                                                $slug = get_post_field('post_name', $post_id);
+                                                echo '<option value="'.$slug.'">'.$titulo.'</option>';
+                                            }
+                                        echo '</select>';
+                                        echo '<div data-container=""></div>';
+                                        if($codFormThree){
+                                            echo '<input type="hidden" data-name="cCodFormExterno" value="'.$codFormThree.'">';
+                                        }
+                                    echo '</div>';
+
+                                }
+
+                        }
+                    echo '</div>';
                     
                     break;
                 case '4': //campo radio

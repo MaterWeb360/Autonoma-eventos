@@ -303,6 +303,9 @@ Container::make('post_meta', 'formulario', 'Formulario')
                                 Field::make('text', 'campo_value', 'Dato/código guardado o a guardar')
                                     ->set_help_text('Ejm: 0, 10, 21, 17')
                                     ->set_width(50),
+                                //codFormExterno
+                                Field::make('text', 'campo_select2_codform', __('Código de formulario: cCodFormExterno'))
+                                    ->set_width(100),
                                 Field::make('select', 'campo_tamano', 'Tamaño')
                                     ->set_width(100)
                                     ->set_options(array(
@@ -316,6 +319,7 @@ Container::make('post_meta', 'formulario', 'Formulario')
                                             'post_type' => 'carreras', 
                                         ],
                                     ]),
+                                
 
 
                             )),

@@ -134,7 +134,7 @@ var camposRequeridos = {
 document.addEventListener('DOMContentLoaded', () => {
   const formulario = document.querySelector('form');
 
-  // 1. Manejo de selects con niveles dependientes
+  // 1. Manejo de selects con niveles dependientes NIVEL 1 A 2
   const nivel1Divs = formulario.querySelectorAll('[data-nivel="1"]');
   nivel1Divs.forEach((div) => {
     const select = div.querySelector('select');
@@ -168,6 +168,45 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   });
+ // 1. Manejo de selects con niveles dependientes NIVEL 2 A 3
+  const nivel2Divs = formulario.querySelectorAll('[data-nivel="2"]');
+  nivel2Divs.forEach((div) => {
+  const select = div.querySelector('select');
+
+  if (select) {
+    select.addEventListener('change', (e) => {
+      const valorSeleccionado = e.target.value;
+
+      // Buscar todos los posibles contenedores de hijos (nivel 3)
+      const todosLosNiveles3 = formulario.querySelectorAll('[data-nivel="3"]');
+
+      // Filtrar hijos correspondientes a la selección
+      const hijosCorrespondientes = Array.from(todosLosNiveles3).filter(el => el.dataset.parent === valorSeleccionado);
+
+      // Si no hay hijos, salir
+      if (hijosCorrespondientes.length === 0) return;
+
+      // Ocultar todos los niveles 3
+      todosLosNiveles3.forEach(n3 => {
+        n3.classList.add('oculto');
+
+        // También ocultar el contenedor si no tiene ningún hijo visible
+        const contenedor = n3.closest('.form__selects');
+        if (contenedor) contenedor.classList.add('oculto');
+      });
+
+      // Mostrar los hijos correspondientes y su contenedor
+      hijosCorrespondientes.forEach(hijo => {
+        hijo.classList.remove('oculto');
+
+        const contenedor = hijo.closest('.form__selects');
+        if (contenedor) contenedor.classList.remove('oculto');
+      });
+    });
+  }
+});
+
+
   
   // 2. Selects que actualizan input oculto
   formulario.querySelectorAll('select[data-name]').forEach(select => {
