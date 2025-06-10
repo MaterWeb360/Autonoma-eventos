@@ -74,62 +74,6 @@ function getGET() {
     return obj;
   }
   
-var camposRequeridos = {
-    cKeyAccess: "",
-    cCodFormExterno: "",
-    cNombres: "",
-    cApellidos: "",
-    cCelular: "",
-    cCorreo: "",
-    nTipDocumento: "",
-    cDocumento: "",
-    nPrograma: "",
-    cPrograma: "",
-    nSubPrograma: "",
-    cSubPrograma: "",
-    nModalidad: "",
-    cModalidad: "",
-    nCarrera: "",
-    cCarrera: "",
-    cDistrito: "",
-    cDepartamento: "",
-    cPais: "",
-    cProvincia: "",
-    cColegio: "",
-    cGrado: "",
-    cPerCodColegio: "",
-    nHorario: "",
-    cHorario: "",
-    cGenero: "",
-    cNacionalidad: "",
-    cNombrePadreApo: "",
-    cCelPadreApo: "",
-    cCorreoPadreApo: "",
-    cAnioEgreso: "",
-    cTurno: "",
-    cOcupacion: "",
-    cEmpresa: "",
-    cCargo: "",
-    cUtmSource: "",
-    cUtmMedium: "",
-    cUtmCampaign: "",
-    cGclid: "",
-    cAux1: "",
-    cAux2: "",
-    cAux3: "",
-    cAux4: "",
-    cAux5: "",
-    cAux6: "",
-    cAux7: "",
-    cAux8: "",
-    cAux9: "",
-    cAux10: "",
-    cAux11: "",
-    cAux12: "",
-    cAux13: "",
-    cAux14: "",
-    cAux15: ""
-  };
 
 //Manejo de niveles  
 document.addEventListener('DOMContentLoaded', () => {
@@ -218,7 +162,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-
 // ✅ Asignar automáticamente name al SELECT desde su data-name
 document.addEventListener('DOMContentLoaded', () => {
   const selectsConDataName = document.querySelectorAll('select[data-name]');
@@ -274,7 +217,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-  
 //Recopilacion y envio de datos
 document.addEventListener('DOMContentLoaded', function () {
     const formulario = document.getElementById('formularioAutonoma');
@@ -716,9 +658,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
-
-
-
-
-
 

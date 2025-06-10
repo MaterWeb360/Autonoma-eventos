@@ -1,28 +1,23 @@
-<!--<script>
-    Parsley.addMessages('es', {
-        defaultMessage: "Este valor parece ser inválido.",
-        type: {
-            email: "Este valor debe ser un correo válido.",
-            url: "Este valor debe ser una URL válida.",
-            number: "Este valor debe ser un número válido.",
-            integer: "Este valor debe ser un número válido.",
-            digits: "Este valor debe ser un dígito válido.",
-            alphanum: "Este valor debe ser alfanumérico."
-        },
-        notblank: "Este valor no debe estar en blanco.",
-        required: "Este valor es requerido.",
-        pattern: "Este valor es incorrecto.",
-        min: "Este valor no debe ser menor que %s.",
-        max: "Este valor no debe ser mayor que %s.",
-        range: "Este valor debe estar entre %s y %s.",
-        minlength: "Este valor es muy corto. La longitud mínima es de %s caracteres.",
-        maxlength: "Este valor es muy largo. La longitud máxima es de %s caracteres.",
-        length: "La longitud de este valor debe estar entre %s y %s caracteres.",
-        mincheck: "Debe seleccionar al menos %s opciones.",
-        maxcheck: "Debe seleccionar %s opciones o menos.",
-        check: "Debe seleccionar entre %s y %s opciones.",
-        equalto: "Este valor debe ser idéntico."
-    });
-    Parsley.setLocale('es');
-</script>-->
+<?php
+// Obtiene los campos requeridos de opciones generales y las convierte en un array, y la smuestra en js.
+$campos = carbon_get_theme_option('g_campos_requeridos_form');
+
+$camposRequeridos = [];
+
+if ($campos && is_array($campos)) {
+    foreach ($campos as $campo) {
+        if (!empty($campo['nombre_campo'])) {
+            $key = esc_js($campo['nombre_campo']);
+            $camposRequeridos[$key] = "";
+        }
+    }
+}
+?>
+
+<script>
+  var camposRequeridos = <?php echo json_encode($camposRequeridos, JSON_UNESCAPED_UNICODE); ?>;
+  console.log("Campos Requeridos cargados dinámicamente:", camposRequeridos);
+</script>
+
+
 <script src="<?php echo get_template_directory_uri(); ?>/public/assets/js/envio.js"></script>

@@ -254,7 +254,7 @@ $boton = carbon_get_post_meta(get_the_ID(), 'boton');
                         echo '<option value="'.$slug.'">'.$titulo.'</option>';
                     }
                     echo '    </select>';
-                    echo '<div data-container="carreraContainer"></div>';
+                    echo '<input type="hidden" data-name="cCarrera" value="">';
                     echo '</div>';
                     break;
                 case '7': //text area

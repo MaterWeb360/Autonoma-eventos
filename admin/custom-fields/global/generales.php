@@ -2,6 +2,7 @@
 
 use Carbon_Fields\Field;
 
+
 $basic_options_container->add_tab('Generales', [
     //Field::make('separator', 'g-plugins-sep', 'Plugins de seguridad')
     //    ->set_classes('separator_theme'),
@@ -46,4 +47,16 @@ $basic_options_container->add_tab('Generales', [
         ->set_width(50),
     Field::make('textarea', 'g_script_footer', 'Scripts Footer')
         ->set_width(50)
+]);
+
+$basic_options_container->add_tab('Variable de campos de formulario', [
+    Field::make('complex', 'g_campos_requeridos_form', 'Campos Requeridos para Envío')
+        ->set_layout('tabbed-horizontal')
+        ->help_text('Agrega aquí los nombres de los campos que debe tener el formulario para ser enviados.')
+        ->add_fields('campo', [
+            Field::make('text', 'nombre_campo', 'Nombre del Campo')
+                ->set_width(50),
+        ])
+        ->set_header_template('<%- nombre_campo ? nombre_campo : "Campo" %>')
+
 ]);
