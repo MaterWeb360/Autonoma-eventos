@@ -97,7 +97,7 @@
       border: 1px solid red;
     }
     .sucess-input{
-      border: 1px solid green;
+      border: 1px solid green !important;
     }
     .oculto{
       display:none !important;
@@ -153,6 +153,24 @@
       padding: 0.75rem 1.5rem;
       font-size: 1rem;
     }
+    .selectableWp {
+      position: absolute;
+      bottom: -1.2rem;
+      left: 0;
+    }
+
+    .form__input-select-wrapper {
+      overflow: visible;
+      margin-bottom: 0;
+      transition: margin-bottom 0.2s ease;
+    }
+
+    /* SOLO SELECTS tendrán margin cuando validan */
+    .form__input-wrapper-select.sucess-input,
+    .form__input-wrapper-select.error-input {
+      margin-bottom: 1rem;
+    }
+
   </style>
  
 </head>
