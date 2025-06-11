@@ -1,64 +1,77 @@
 <?php
 get_header();
+
+// Obtener el orden de las secciones
+$secciones_orden = carbon_get_the_post_meta('inicio_secciones');
+
+// Orden por defecto si no hay configuración
+if (empty($secciones_orden)) {
+    $secciones_orden = [
+        ['seccion' => 'hero'],
+        ['seccion' => 'info'],
+        ['seccion' => 'beneficios'],
+        ['seccion' => 'video'],
+        ['seccion' => 'expositor'],
+        ['seccion' => 'webinars'],
+        ['seccion' => 'carreras']
+    ];
+}
 ?>
 
-<?php if (elCampo('in-show') == true) { ?>
-    <style>
-        .hero {
-            margin-bottom: 28rem;
-            padding-bottom: 0;
-        }
-    </style>
-<?php } ?>
-
-<?php
-get_template_part('public/pages/inicio/inicio', 'hero', []);
-?>
-
-<div class="beneficios">
-    <div class="padding-global">
-        <div class="container-medium">
-            <div class="beneficios_wrapper">
-                <?php
-                if (elCampo('in-show') == false) {
-                    get_template_part('public/pages/inicio/inicio', 'info', []);
-                }
-                ?>
-                <div class="padding-bottom padding-xxlarge">
-                </div>
-                <?php
-                if (elCampo('be-show') == false) {
-                    get_template_part('public/pages/inicio/inicio', 'beneficio', []);
-                }
-                ?>
-                <div class="padding-bottom padding-xxlarge">
-                </div>
-                <?php
-                if (elCampo('vi-show') == false) {
-                    get_template_part('public/pages/inicio/inicio', 'video', []);
-                }
-                ?>
-            </div>
-            <div class="padding-bottom padding-xxlarge">
-            </div>
+<div class="main-wrapper">
             <?php
-            if (elCampo('ex-show') == false) {
-                get_template_part('public/pages/inicio/inicio', 'expositor', []);
-            }
-            ?>
-            <div class="padding-bottom padding-xxlarge">
-            </div>
+                // Renderizar cada sección en el orden especificado
+                foreach ($secciones_orden as $seccion) {
+                    switch ($seccion['seccion']) {
+                        case 'hero':
+                            get_template_part('public/pages/inicio/inicio', 'hero', []);
+                            break;
+                            
+                        case 'info':
+                            if (elCampo('in-show') == false) {
+                                get_template_part('public/pages/inicio/inicio', 'info', []);
+                                echo '<div class="padding-bottom padding-xxlarge"></div>';
+                            }
+                            break;
+                            
+                        case 'beneficios':
+                            if (elCampo('be-show') == false) {
+                                get_template_part('public/pages/inicio/inicio', 'beneficio', []);
+                                echo '<div class="padding-bottom padding-xxlarge"></div>';
+                            }
+                            break;
+                            
+                        case 'video':
+                            if (elCampo('vi-show') == false) {
+                                get_template_part('public/pages/inicio/inicio', 'video', []);
+                                echo '<div class="padding-bottom padding-xxlarge"></div>';
+                            }
+                            break;
+                            
+                        case 'expositor':
+                            if (elCampo('ex-show') == false) {
+                                get_template_part('public/pages/inicio/inicio', 'expositor', []);
+                                echo '<div class="padding-bottom padding-xxlarge"></div>';
+                            }
+                            break;
+                            
+                        case 'webinars':
+                            if (elCampo('we-show') == false) {
+                                get_template_part('public/pages/inicio/inicio', 'webinar', []);
+                            }
+                            break;
+                            
+                        case 'carreras':
+                            if (elCampo('ca-show') == false) {
+                                get_template_part('public/pages/inicio/inicio', 'carreras', []);
+                            }
+                            break;
+                    }
+                }
+                ?>
+        <div class="padding-bottom padding-xxlarge">
         </div>
-    </div>
 </div>
 
 <?php
-if (elCampo('we-show') == false) {
-    get_template_part('public/pages/inicio/inicio', 'webinar', []);
-}
-
-if (elCampo('ca-show') == false) {
-    get_template_part('public/pages/inicio/inicio', 'carreras', []);
-}
-
 get_footer();

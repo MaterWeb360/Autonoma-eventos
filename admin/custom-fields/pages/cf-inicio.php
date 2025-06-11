@@ -739,3 +739,37 @@ Container::make('post_meta', 'flotante', 'Botones flotantes')
                     ->set_attribute('type', 'url')
             ])
     ]);
+
+
+Container::make('post_meta', 'Orden de Secciones', 'Orden de Secciones')
+    ->where('post_type', '=', 'page')
+    ->where('post_id', '!=', function() {
+        $gracias_page = get_page_by_path('gracias'); 
+        return $gracias_page ? $gracias_page->ID : 0;
+    })
+    ->add_fields([
+        Field::make('complex', 'inicio_secciones', 'Ordenar Secciones')
+            ->set_layout('tabbed-horizontal')
+            ->setup_labels([
+                'plural_name' => 'Secciones',
+                'singular_name' => 'Sección'
+            ])
+            ->add_fields([
+                Field::make('select', 'seccion', 'Sección')
+                    ->set_options([
+                        'hero' => 'Hero',
+                        'info' => 'Información Inicial',
+                        'beneficios' => 'Beneficios',
+                        'video' => 'Video',
+                        'expositor' => 'Expositor',
+                        'webinars' => 'Webinars',
+                        'carreras' => 'Carreras'
+                    ])
+                    ->set_required(true)
+            ])
+            ->set_header_template('
+                <% if (seccion) { %>
+                    <%= seccion %>
+                <% } %>
+            ')
+    ]);

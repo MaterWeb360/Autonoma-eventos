@@ -7,34 +7,41 @@ $img = fileCampo('ex-img');
 
 $img_expos = fileCampo('ex-fecha-img');
 ?>
-
-<div class="expositor_wrapper fondo_secundario">
-    <div class="expositor_title">
-        <h2 class="heading-style-h2 color_primario"><?= $titulo ?></h2>
-    </div>
-    <div class="expositor_grid">
-        <div class="expositor_cotent">
-            <div class="expositor_info-wrp">
-                
-                <?php if (!empty($img_expos)) : ?>
-                <img src="<?= $img_expos; ?>" loading="lazy" alt=""
-                    class="icon-1x1-medium">
-                <?php endif; ?>
-                <div class="expositor_info-name color_terciario">
-                    <div class="heading-style-h4"><?= $nombre ?></div>
-                    <div class="color_primario"><?= $puesto ?></div>
+<div class="beneficios" style="margin-top: 0;">
+    <div class="padding-global">
+        <div class="container-medium">
+            <div class="beneficios_wrapper">
+                <div class="expositor_wrapper fondo_secundario">
+                    <div class="expositor_title">
+                        <h2 class="heading-style-h2 color_primario"><?= $titulo ?></h2>
+                    </div>
+                    <div class="expositor_grid">
+                        <div class="expositor_cotent">
+                            <div class="expositor_info-wrp">
+                                
+                                <?php if (!empty($img_expos)) : ?>
+                                <img src="<?= $img_expos; ?>" loading="lazy" alt=""
+                                    class="icon-1x1-medium">
+                                <?php endif; ?>
+                                <div class="expositor_info-name color_terciario">
+                                    <div class="heading-style-h4"><?= $nombre ?></div>
+                                    <div class="color_primario"><?= $puesto ?></div>
+                                </div>
+                            </div>
+                            <div class="expositor_prf color_terciario">
+                                <p><?= $info ?></p>
+                            </div>
+                        </div>
+                        <div class="expositor_img-wrp">
+                            <?php if (!empty($img)) : ?>
+                            <img src="<?= $img ?>" loading="lazy" alt=""
+                                class="expositor_img">
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <!--<img src="<?= TEMA_P_IMG ?>/asterisc.svg" loading="lazy" alt="" class="expositor_asterisc">-->
                 </div>
             </div>
-            <div class="expositor_prf color_terciario">
-                <p><?= $info ?></p>
-            </div>
         </div>
-        <div class="expositor_img-wrp">
-            <?php if (!empty($img)) : ?>
-            <img src="<?= $img ?>" loading="lazy" alt=""
-                class="expositor_img">
-            <?php endif; ?>
-        </div>
-    </div>
-    <!--<img src="<?= TEMA_P_IMG ?>/asterisc.svg" loading="lazy" alt="" class="expositor_asterisc">-->
+    </div>    
 </div>
