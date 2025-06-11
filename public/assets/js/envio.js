@@ -75,7 +75,7 @@ function getGET() {
   }
   
 
-//Manejo de niveles  
+//Manejo de niveles  selects y primer nivel checkbox
 document.addEventListener('DOMContentLoaded', () => {
   const formulario = document.querySelector('form');
   const maxNivel = 4;
@@ -84,41 +84,56 @@ document.addEventListener('DOMContentLoaded', () => {
     const elementosNivel = formulario.querySelectorAll(`[data-nivel="${nivelActual}"]`);
 
     elementosNivel.forEach((div) => {
+      // 👇 Busca tanto selects como radios (solo para nivel 1)
       const select = div.querySelector('select');
-      if (!select) return;
+      const radios = nivelActual === 1 ? div.querySelectorAll('input[type="radio"]') : null;
 
-      select.addEventListener('change', (e) => {
-        const valorSeleccionado = e.target.value;
-
-        // 🔍 Verificamos si este select tiene hijos asociados
-        const hijos = formulario.querySelectorAll(`[data-nivel="${nivelHijo}"][data-parent="${valorSeleccionado}"]`);
-        const tieneHijos = hijos.length > 0;
-
-        if (!tieneHijos) {
-          // 👇 Este nivel no tiene hijos, no toca niveles posteriores
-          return;
-        }
-
-        // 🔁 Ocultar todos los niveles hijos del actual
-        for (let n = nivelHijo; n <= maxNivel; n++) {
-          const siguientes = formulario.querySelectorAll(`[data-nivel="${n}"]`);
-          siguientes.forEach(el => {
-            el.classList.add('oculto');
-            const contenedor = el.closest('.form__selects');
-            if (contenedor) contenedor.classList.add('oculto');
-
-            const selectInterno = el.querySelector('select');
-            if (selectInterno) selectInterno.selectedIndex = 0;
-          });
-        }
-
-        // 🔓 Mostrar los hijos directos válidos
-        hijos.forEach(hijo => {
-          hijo.classList.remove('oculto');
-          const contenedor = hijo.closest('.form__selects');
-          if (contenedor) contenedor.classList.remove('oculto');
+      // 🔄 Escuchar cambios en SELECT
+      if (select) {
+        select.addEventListener('change', (e) => {
+          const valorSeleccionado = e.target.value;
+          actualizarNivelesHijos(valorSeleccionado, nivelHijo);
         });
+      }
+
+      // 🔄 Escuchar cambios en RADIOS (solo nivel 1)
+      if (radios && nivelActual === 1) {
+        radios.forEach(radio => {
+          radio.addEventListener('change', (e) => {
+            const valorSeleccionado = e.target.value;
+            actualizarNivelesHijos(valorSeleccionado, nivelHijo);
+          });
+        });
+      }
+    });
+  }
+
+  // ♻️ Función reutilizable para actualizar niveles hijos
+  function actualizarNivelesHijos(valorSeleccionado, nivelHijo) {
+    // 🔍 Verificar si hay hijos asociados
+    const hijos = formulario.querySelectorAll(`[data-nivel="${nivelHijo}"][data-parent="${valorSeleccionado}"]`);
+    const tieneHijos = hijos.length > 0;
+
+    if (!tieneHijos) return;
+
+    // 🔁 Ocultar niveles posteriores
+    for (let n = nivelHijo; n <= maxNivel; n++) {
+      const siguientes = formulario.querySelectorAll(`[data-nivel="${n}"]`);
+      siguientes.forEach(el => {
+        el.classList.add('oculto');
+        const contenedor = el.closest('.form__selects');
+        if (contenedor) contenedor.classList.add('oculto');
+
+        const selectInterno = el.querySelector('select');
+        if (selectInterno) selectInterno.selectedIndex = 0;
       });
+    }
+
+    // 🔓 Mostrar hijos directos
+    hijos.forEach(hijo => {
+      hijo.classList.remove('oculto');
+      const contenedor = hijo.closest('.form__selects');
+      if (contenedor) contenedor.classList.remove('oculto');
     });
   }
 
@@ -128,36 +143,69 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-//manejo de asignacion de names/data-names
+// Manejo de asignación de names/data-names para RADIOS y SELECTS
 document.addEventListener('DOMContentLoaded', () => {
-  const todosLosSelects = document.querySelectorAll('select[data-name^="n"]');
+  // 👇 Selecciona tanto selects como radios con data-name que empiece con "n"
+  const inputsSuperiores = document.querySelectorAll(`
+    select[data-name^="n"],
+    input[type="radio"][data-name^="n"]
+  `);
 
-  todosLosSelects.forEach(select => {
-    select.addEventListener('change', () => {
-      const selectedOption = select.options[select.selectedIndex];
-      const textoSeleccionado = selectedOption ? selectedOption.text.trim() : '';
-      const dataName = select.dataset.name;
-
+  inputsSuperiores.forEach(input => {
+    input.addEventListener('change', (e) => {
+      const dataName = input.dataset.name;
       if (!dataName || !dataName.startsWith('n')) return;
 
       const clave = 'c' + dataName.substring(1);
-      const contenedor = select.closest('.form__input-select-wrapper');
-      if (!contenedor) return;
+      let textoSeleccionado = '';
 
-      let inputOculto = contenedor.querySelector(`input[name="${clave}"]`) || contenedor.querySelector(`input[data-name="${clave}"]`);
-      if (!inputOculto) return;
+      // 🔘 Caso RADIO BUTTON
+      if (input.type === 'radio') {
+        const labelPadre = input.closest('label.form__input-radio-button');
+        if (!labelPadre) return;
 
-      // Paso 1: Resetear todos los inputs que tengan el mismo name activo
-      const todosLosInputsMismoNombre = document.querySelectorAll(`input[name="${clave}"]`);
-      todosLosInputsMismoNombre.forEach(input => {
-        input.setAttribute('data-name', clave);
-        input.removeAttribute('name');
-      });
+        // Obtiene el texto del <p> hermano al radio
+        textoSeleccionado = labelPadre.querySelector('p')?.textContent.trim() || '';
+        
+        // Busca el input oculto dentro del mismo label
+        const inputOculto = labelPadre.querySelector(`input[data-name="${clave}"]`);
+        if (!inputOculto) return;
 
-      // Paso 2: Activar solo el input correspondiente a este select
-      inputOculto.setAttribute('name', clave);
-      inputOculto.removeAttribute('data-name');
-      inputOculto.value = textoSeleccionado;
+        // Paso 1: Resetear todos los inputs con la misma clave
+        const todosLosInputsMismoNombre = document.querySelectorAll(`input[name="${clave}"]`);
+        todosLosInputsMismoNombre.forEach(input => {
+          input.setAttribute('data-name', clave);
+          input.removeAttribute('name');
+        });
+
+        // Paso 2: Activar solo el input correspondiente a este radio
+        inputOculto.setAttribute('name', clave);
+        inputOculto.removeAttribute('data-name');
+        inputOculto.value = textoSeleccionado;
+      }
+
+      // 📜 Caso SELECT (original)
+      else if (input.tagName === 'SELECT') {
+        const selectedOption = input.options[input.selectedIndex];
+        textoSeleccionado = selectedOption ? selectedOption.text.trim() : '';
+        const contenedor = input.closest('.form__input-select-wrapper');
+        if (!contenedor) return;
+
+        const inputOculto = contenedor.querySelector(`input[name="${clave}"]`) || 
+                            contenedor.querySelector(`input[data-name="${clave}"]`);
+        if (!inputOculto) return;
+
+        // Misma lógica de reset y activación
+        const todosLosInputsMismoNombre = document.querySelectorAll(`input[name="${clave}"]`);
+        todosLosInputsMismoNombre.forEach(input => {
+          input.setAttribute('data-name', clave);
+          input.removeAttribute('name');
+        });
+
+        inputOculto.setAttribute('name', clave);
+        inputOculto.removeAttribute('data-name');
+        inputOculto.value = textoSeleccionado;
+      }
     });
   });
 });
@@ -183,6 +231,36 @@ document.addEventListener('DOMContentLoaded', () => {
       // Paso 2: Asegurar que el select actual tenga el name activo
       select.setAttribute('name', dataNameActual);
       console.log(`✅ Asignado name="${dataNameActual}" al SELECT seleccionado`);
+    });
+  });
+});
+
+//asignar valores al input oculto de los radio button
+document.addEventListener('DOMContentLoaded', () => {
+  // Escuchamos todos los cambios en radio buttons
+  document.querySelectorAll('input[type="radio"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+      // Solo procesar si está seleccionado
+      if (!this.checked) return;
+      
+      // 1. Encontrar el input oculto hermano
+      const labelPadre = this.closest('label.form__input-radio-button');
+      if (!labelPadre) return;
+      
+      const inputOculto = labelPadre.querySelector('input[type="hidden"]');
+      if (!inputOculto || !inputOculto.dataset.name) return;
+      
+      const nombreCampo = inputOculto.dataset.name;
+      
+      // 2. Cambiar todos los inputs con este name a data-name
+      document.querySelectorAll(`input[name="${nombreCampo}"]`).forEach(input => {
+        input.setAttribute('data-name', nombreCampo);
+        input.removeAttribute('name');
+      });
+      
+      // 3. Cambiar el input oculto actual a name
+      inputOculto.setAttribute('name', nombreCampo);
+      inputOculto.removeAttribute('data-name');
     });
   });
 });

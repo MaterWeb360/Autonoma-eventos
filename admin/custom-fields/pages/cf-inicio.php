@@ -168,6 +168,17 @@ Container::make('post_meta', 'formulario', 'Formulario')
                             'compare' => '=',
                         ],
                     ]),
+                
+                Field::make( 'checkbox', 'campo_check_transform', 'Cambiar primer seleccionable  a checkbox' )
+                    ->set_help_text('¿Deseas transformar el primer selecfcionable en un campo checkbox?')
+                    ->set_conditional_logic(array(
+                        'relation' => 'AND',
+                        array(
+                            'field' => 'campos',
+                            'value' => '3',
+                            'compare' => '=',
+                        ),
+                    )),    
                 //CAMPO SELECT
                 Field::make('complex', 'campo_select', __('Campo de selección'))
                     ->setup_labels(['plural_name' => 'Selecciones', 'singular_name' => 'Selección'])

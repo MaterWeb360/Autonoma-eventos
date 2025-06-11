@@ -45,21 +45,58 @@ $boton = carbon_get_post_meta(get_the_ID(), 'boton');
                     $bucleOps = $campo['campo_select'];
                     $n_name = $campo['campo_name_option'];
                     $c_name = $campo['campo_name'];
+                    $check_transform = $campo['campo_check_transform'];
 
-                    //1er nivel
-                    echo '<div class="form__input-select-wrapper" style="width: '.$size.'" data-nivel="1" data-tipo="unico">';
-                        echo '<select name="" data-name="'.$n_name.'" class="form__input-select w-select">';
-                        echo '<option>'.$s_place.'</option>';
+
+                    if($check_transform == '1'){
+                        echo '<div class="form__input-radio-group" data-nivel="1" data-tipo="unico" style="width:'.$size.'">';
+                        echo '    <div class="form__input-radio-label">'.$s_place.'</div>';
+                        echo '    <div class="form__input-radio-wrapper">';
                         foreach ($bucleOps as $option) {
                             $value = $option['campo_select_value'];
                             $label = $option['campo_select_placeholder'];
-                            echo '<option value="'.$value.'">'.$label.'</option>';
+                            echo '        <label class="form__input-radio-button">';
+                            echo '            <input required type="radio" value="'.$value.'" name="'.$n_name.'" data-name="'.$n_name.'" class="form__input-checkbox">';
+                            echo '            <p>'.$label.'</p>';
+                            echo '            <input type="hidden" data-name="'.$c_name.'" value="">';
+                            echo '        </label>';
                         }
-                        echo '</select>';
-                        if($c_name){
-                        echo '<input type="hidden" data-name="'.$c_name.'" value="">';
-                        }
-                    echo '</div>';
+                        echo '    </div>';
+                        echo '</div>';
+
+                    }else{
+                        echo '<div class="form__input-select-wrapper" style="width: '.$size.'" data-nivel="1" data-tipo="unico">';
+                            echo '<select name="" data-name="'.$n_name.'" class="form__input-select w-select">';
+                                echo '<option>'.$s_place.'</option>';
+                                foreach ($bucleOps as $option) {
+                                    $value = $option['campo_select_value'];
+                                    $label = $option['campo_select_placeholder'];
+                                    echo '<option value="'.$value.'">'.$label.'</option>';
+                                }
+                            echo '</select>';
+                            if($c_name){
+                            echo '<input type="hidden" data-name="'.$c_name.'" value="">';
+                            }
+                        echo '</div>';
+                    }
+
+                    
+
+
+                    //1er nivel
+                    //echo '<div class="form__input-select-wrapper" style="width: '.$size.'" data-nivel="1" data-tipo="unico">';
+                    //    echo '<select name="" data-name="'.$n_name.'" class="form__input-select w-select">';
+                    //    echo '<option>'.$s_place.'</option>';
+                    //    foreach ($bucleOps as $option) {
+                    //        $value = $option['campo_select_value'];
+                    //        $label = $option['campo_select_placeholder'];
+                    //        echo '<option value="'.$value.'">'.$label.'</option>';
+                    //    }
+                    //    echo '</select>';
+                    //    if($c_name){
+                    //    echo '<input type="hidden" data-name="'.$c_name.'" value="">';
+                    //    }
+                    //echo '</div>';
                     
                     //2do nivel
                     echo '<div class="form__selects oculto" style="width: 100%">';

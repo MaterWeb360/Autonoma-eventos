@@ -79,18 +79,25 @@
       margin-bottom:0;background: transparent;border: none;
     }
     .form__input-radio-wrapper{
-      display:flex;
-      flex-wrap:wrap;
-      gap:0.5rem;
-    }
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem; /* Espacio entre columnas y filas */
+  }
+  .form__input-checkbox{
+        margin-top: 0.3rem;
+  }
+  .form__input-checkbox:hover {
+      cursor: pointer;
+  }
     .form__input-radio-button{
       display:flex;
-      justify-content: space-between;
+      align-items: flex-start;
+      justify-content: left;
       gap: 0.5rem;
       font-size: 0.875rem;
       line-height: 1.25rem;
     }
-    .form__input-radio-button::hover {
+    .form__input-radio-button:hover {
       cursor: pointer;
     }
     .error-input{
