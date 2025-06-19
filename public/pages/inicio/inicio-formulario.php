@@ -79,24 +79,6 @@ $boton = carbon_get_post_meta(get_the_ID(), 'boton');
                             }
                         echo '</div>';
                     }
-
-                    
-
-
-                    //1er nivel
-                    //echo '<div class="form__input-select-wrapper" style="width: '.$size.'" data-nivel="1" data-tipo="unico">';
-                    //    echo '<select name="" data-name="'.$n_name.'" class="form__input-select w-select">';
-                    //    echo '<option>'.$s_place.'</option>';
-                    //    foreach ($bucleOps as $option) {
-                    //        $value = $option['campo_select_value'];
-                    //        $label = $option['campo_select_placeholder'];
-                    //        echo '<option value="'.$value.'">'.$label.'</option>';
-                    //    }
-                    //    echo '</select>';
-                    //    if($c_name){
-                    //    echo '<input type="hidden" data-name="'.$c_name.'" value="">';
-                    //    }
-                    //echo '</div>';
                     
                     //2do nivel
                     echo '<div class="form__selects oculto" style="width: 100%">';

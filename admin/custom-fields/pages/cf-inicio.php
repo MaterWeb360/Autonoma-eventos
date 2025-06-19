@@ -579,7 +579,7 @@ Container::make('post_meta', 'formulario', 'Formulario')
             ->set_width(100),    
         ]);
 
-Container::make('post_meta', 'infoini', 'Información inicial')
+Container::make('post_meta', 'infoini', 'Información del evento')
     ->where('post_type', '=', 'page')
     ->where('post_id', '!=', function() {
         $gracias_page = get_page_by_path('gracias'); 
@@ -591,10 +591,10 @@ Container::make('post_meta', 'infoini', 'Información inicial')
         Field::make('textarea', 'in-titulo', 'Título de sección')
             ->set_rows(2),
         Field::make('textarea', 'in-informacion', 'Descripción'),
-        Field::make('image', 'in-duracion-img', 'Ícono duración')
+        Field::make('image', 'in-duracion-img', 'Ícono de hora de inicio')
             ->help_text('MEDIDAS: 54px x 54px')
             ->set_width(10),
-        Field::make('textarea', 'in-duracion', 'Duración')
+        Field::make('textarea', 'in-duracion', 'Hora de inicio')
             ->set_width(15)
             ->set_rows(2),
         Field::make('image', 'in-fecha-img', 'Ícono fecha')
@@ -603,7 +603,7 @@ Container::make('post_meta', 'infoini', 'Información inicial')
         Field::make('textarea', 'in-fecha', 'Fecha')
             ->set_width(15)
             ->set_rows(2),
-        Field::make('image', 'in-ubicacion-img', 'Ícono unicación')
+        Field::make('image', 'in-ubicacion-img', 'Ícono ubicación')
             ->help_text('MEDIDAS: 54px x 54px')
             ->set_width(10),
         Field::make('textarea', 'in-ubicacion', 'Ubicación')
@@ -768,13 +768,13 @@ Container::make('post_meta', 'Orden de Secciones', 'Orden de Secciones')
             ->add_fields([
                 Field::make('select', 'seccion', 'Sección')
                     ->set_options([
-                        'hero' => 'Hero',
-                        'info' => 'Información Inicial',
-                        'beneficios' => 'Beneficios',
-                        'video' => 'Video',
-                        'expositor' => 'Expositor',
-                        'webinars' => 'Webinars',
-                        'carreras' => 'Carreras'
+                        'Cabecera' => 'Cabecera',
+                        'Información del evento' => 'Información del evento',
+                        'Beneficios' => 'Beneficios',
+                        'Video' => 'Video',
+                        'Expositor' => 'Expositor',
+                        'Webinars' => 'Webinars',
+                        'Carreras' => 'Carreras'
                     ])
                     ->set_required(true)
             ])

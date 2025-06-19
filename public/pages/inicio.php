@@ -23,45 +23,45 @@ if (empty($secciones_orden)) {
                 // Renderizar cada sección en el orden especificado
                 foreach ($secciones_orden as $seccion) {
                     switch ($seccion['seccion']) {
-                        case 'hero':
+                        case 'Cabecera':
                             get_template_part('public/pages/inicio/inicio', 'hero', []);
                             break;
                             
-                        case 'info':
+                        case 'Información del evento':
                             if (elCampo('in-show') == false) {
                                 get_template_part('public/pages/inicio/inicio', 'info', []);
                                 echo '<div class="padding-bottom padding-xxlarge"></div>';
                             }
                             break;
                             
-                        case 'beneficios':
+                        case 'Beneficios':
                             if (elCampo('be-show') == false) {
                                 get_template_part('public/pages/inicio/inicio', 'beneficio', []);
                                 echo '<div class="padding-bottom padding-xxlarge"></div>';
                             }
                             break;
                             
-                        case 'video':
+                        case 'Video':
                             if (elCampo('vi-show') == false) {
                                 get_template_part('public/pages/inicio/inicio', 'video', []);
                                 echo '<div class="padding-bottom padding-xxlarge"></div>';
                             }
                             break;
                             
-                        case 'expositor':
+                        case 'Expositor':
                             if (elCampo('ex-show') == false) {
                                 get_template_part('public/pages/inicio/inicio', 'expositor', []);
                                 echo '<div class="padding-bottom padding-xxlarge"></div>';
                             }
                             break;
                             
-                        case 'webinars':
+                        case 'Webinars':
                             if (elCampo('we-show') == false) {
                                 get_template_part('public/pages/inicio/inicio', 'webinar', []);
                             }
                             break;
                             
-                        case 'carreras':
+                        case 'Carreras':
                             if (elCampo('ca-show') == false) {
                                 get_template_part('public/pages/inicio/inicio', 'carreras', []);
                             }

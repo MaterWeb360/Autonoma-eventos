@@ -571,8 +571,8 @@ document.addEventListener('DOMContentLoaded', function () {
     //Funcion para envio de datos
     function sendDatos(action,datosForm) {
         //var typ ="http://localhost/autonoma-webinars/gracias/";
-        //var typ ="https://autonoma.performlab.co/gracias/";
-        var typ ="https://www.autonoma.pe/eventos-autonoma/gracias/";
+        var typ ="https://autonoma.performlab.co/gracias/";
+        //var typ ="https://www.autonoma.pe/eventos-autonoma/gracias/";
         jQuery.ajax({
           type: "POST",
           url: action,

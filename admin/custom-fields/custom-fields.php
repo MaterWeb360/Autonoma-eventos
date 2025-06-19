@@ -11,6 +11,9 @@ function fields_aedon()
     // Paginas
     require TEMA_FIELDS . '/pages/cf-inicio.php';
     require TEMA_FIELDS . '/pages/cf-gracias.php';
+
+    //Templates
+    require TEMA_FIELDS . '/pages/cf-carreras.php';
 }
 add_action('carbon_fields_register_fields', 'fields_aedon');
 
